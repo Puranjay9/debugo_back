@@ -28,8 +28,7 @@ func ConnectToDB() error {
 	_, err = DB.Exec(`
 		CREATE TABLE IF NOT EXISTS projects (
 			id UUID PRIMARY KEY, 
-			name TEXT, 
-			created_at TIMESTAMP DEFAULT now()
+			name TEXT
 		)
 	`)
 

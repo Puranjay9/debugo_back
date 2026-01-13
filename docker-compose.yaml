@@ -28,5 +28,16 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  migrate:
+    image: migrate/migrate
+    volumes:
+    - ./migrations:/migrations
+    command: >
+      -path=/migrations
+      -database postgres://postgres:postgres@go_db:5432/postgres?sslmode=disable
+      up
+    depends_on:
+    - go_db
+    
 volumes:
   pgdata:

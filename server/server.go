@@ -1,15 +1,12 @@
 package server
 
 import (
+	"debugo_back/db"
+	"debugo_back/routes"
+	"log"
 	"net/http"
 
-	"debugo_back/routes"
-
 	"github.com/gorilla/mux"
-
-	"debugo_back/db"
-
-	"log"
 )
 
 type Server struct {
@@ -22,13 +19,16 @@ func NewServer(address string) *Server {
 
 func (s *Server) Run() error {
 
+	//dB connection
 	if err := db.ConnectToDB(); err != nil {
 		log.Fatal("Failed to connect to database:", err)
 	}
 	defer db.CloseDB()
+
+	//router configs
 	router := mux.NewRouter()
 
-	router.HandleFunc("/hello", routes.HandleHello).
+	router.HandleFunc("/cli/init", routes.HandleHello).
 		Methods(http.MethodGet)
 
 	return http.ListenAndServe(s.address, router)
