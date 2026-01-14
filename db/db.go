@@ -7,11 +7,6 @@ import (
 	_ "github.com/lib/pq"
 )
 
-type Project struct {
-	ID   int
-	Name string
-}
-
 var DB *sql.DB
 
 func ConnectToDB() error {

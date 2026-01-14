@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	api := server.NewServer(":3000")
+	api := server.NewServer(":8000")
 
 	if err := api.Run(); err != nil {
 		fmt.Println("Error starting the server:", err)

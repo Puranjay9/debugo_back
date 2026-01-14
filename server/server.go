@@ -28,8 +28,8 @@ func (s *Server) Run() error {
 	//router configs
 	router := mux.NewRouter()
 
-	router.HandleFunc("/cli/init", routes.HandleHello).
-		Methods(http.MethodGet)
+	router.HandleFunc("/cli/init", routes.HandleProjectInit).
+		Methods(http.MethodPost)
 
 	return http.ListenAndServe(s.address, router)
 }
