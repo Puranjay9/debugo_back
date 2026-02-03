@@ -24,8 +24,9 @@ type RagPayload struct {
 }
 
 type RagResponse struct {
-	Analysis string `json:"analysis"`
-	Fix      string `json:"fix"`
+	Analysis string     `json:"analysis"`
+	Fix      string     `json:"fix"`
+	Payload  RagPayload `json:"payload,omitempty"`
 }
 
 func HandleAnalyze(w http.ResponseWriter, r *http.Request) {
@@ -93,21 +94,12 @@ func HandleAnalyze(w http.ResponseWriter, r *http.Request) {
 	// Using a dummy request structure for now
 	resp, err := http.Post(RagEndpoint, "application/json", bytes.NewBuffer(payloadBytes))
 	if err != nil {
-		// Since it's a dummy endpoint, it might fail.
-		// For development, we can return a mock response if connection fails,
-		// OR we can just error out.
-		// The prompt says "waits for its response".
-		// Let's return a Mock response if the connection fails (likely),
-		// effectively acting as a "dummy" outcome for the user.
-		// However, the user said "Use a dummy rag endpoint", implying use a URL.
-		// If I just fail, they can't test.
-		// I'll return a 502 but with a helpful message, OR I can mock the success for now.
-		// Let's try to return the error but maybe the user wants to assume it works?
-		// "I will replace it when the endpoint is created" implies I should write the client code.
-		w.WriteHeader(http.StatusBadGateway)
-		json.NewEncoder(w).Encode(map[string]string{
-			"error": "Failed to contact RAG service: " + err.Error(),
-			"note":  "Make sure the RAG service is running at " + RagEndpoint,
+		// Mock response for testing when RAG is unavailable
+		w.WriteHeader(http.StatusOK) // Returning 200 OK so you can see the payload
+		json.NewEncoder(w).Encode(RagResponse{
+			Analysis: "RAG Service Unavailable (Mock Response)",
+			Fix:      "Check if RAG service is running",
+			Payload:  ragPayload,
 		})
 		return
 	}
@@ -129,6 +121,8 @@ func HandleAnalyze(w http.ResponseWriter, r *http.Request) {
 		})
 		return
 	}
+
+	ragResp.Payload = ragPayload // Attach payload to success response too
 
 	// Return analysis to user
 	w.WriteHeader(http.StatusOK)
