@@ -26,6 +26,20 @@ func ConnectToDB() error {
 			name TEXT
 		)
 	`)
+	if err != nil {
+		return err
+	}
+
+	_, err = DB.Exec(`
+		CREATE TABLE IF NOT EXISTS history (
+			id UUID PRIMARY KEY,
+			project_id UUID REFERENCES projects(id),
+			error TEXT,
+			error_source TEXT,
+			code_diff TEXT,
+			timestamp TIMESTAMPTZ DEFAULT NOW()
+		)
+	`)
 
 	return err
 }
