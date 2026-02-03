@@ -37,5 +37,8 @@ func (s *Server) Run() error {
 	router.HandleFunc("/cli/dump", routes.HandleGetAllData).
 		Methods(http.MethodGet)
 
+	router.HandleFunc("/cli/analyze", routes.HandleAnalyze).
+		Methods(http.MethodPost)
+
 	return http.ListenAndServe(s.address, router)
 }
