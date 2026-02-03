@@ -34,5 +34,8 @@ func (s *Server) Run() error {
 	router.HandleFunc("/cli/record", routes.HandleRecordApi).
 		Methods(http.MethodPost)
 
+	router.HandleFunc("/cli/dump", routes.HandleGetAllData).
+		Methods(http.MethodGet)
+
 	return http.ListenAndServe(s.address, router)
 }

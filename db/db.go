@@ -33,7 +33,7 @@ func ConnectToDB() error {
 	_, err = DB.Exec(`
 		CREATE TABLE IF NOT EXISTS history (
 			id UUID PRIMARY KEY,
-			project_id UUID REFERENCES projects(id),
+			project_id UUID REFERENCES projects(id) ON DELETE CASCADE,
 			error TEXT,
 			error_source TEXT,
 			code_diff TEXT,
