@@ -28,6 +28,11 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
+  rag_service:
+    build: ./rag_service
+    ports:
+      - "8000:8000"    
+
   migrate:
     image: migrate/migrate
     volumes:
